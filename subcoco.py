@@ -68,15 +68,23 @@ def load_classes(filename):
     return {k: v for (k, v) in enumerate(file_.read().split('\n'), 1)}
 
 
+def cat_id2name(content):
+    cats = defaultdict(int)
+    for cat in content['categories']:
+        cats[cat['id']] = cat['name']
+    return cats
+
+
 def print_stats(ann):
     counter = count_categories_occurrence(ann)
     classes = {}
     if args.classes:
         classes = load_classes(args.classes)
     files = get_image_ids(ann)
+    cats = cat_id2name(ann)
     print('Files: {0}'.format(len(files)))
     for k, v in counter.items():
-        text = "Category {0}: {1}".format(k, v)
+        text = "Category {0}[{1}]: {2}".format(cats[k], k, v)
         if classes.get(k):
             text = '{} -> {}'.format(text, classes.get(k))
         print(text)
@@ -91,8 +99,8 @@ parser.add_argument('--classes', '-l', help='File containing class names')
 parser.add_argument(
     '--stats', '-s', action='store_true', default=False,
     help='Show only stats')
-parser.add_argument('--output-path', '-o', help='Output COCO annotation file')
 parser.add_argument('input_path', help='Input COCO annotation file')
+parser.add_argument('--output_path', '-o', help='Output COCO annotation file')
 
 args = parser.parse_args(sys.argv[1:])
 
