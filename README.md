@@ -20,6 +20,14 @@ Actions:
  - `instance_size`: instance size - the distribution of instance sizes.
     Option: `-d 0.1` specify delta percentage value.
 
+# View
+
+Paint images with bbox and segmentation annotations:
+
+```bash
+$ python view.py annotation.json images_dir output_dir
+```
+
 # SubCoco
 
 Get a subset of COCO.
