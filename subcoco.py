@@ -91,10 +91,18 @@ def print_stats(ann):
     print('total: {0}'.format(sum(counter.values())))
 
 
+def print_category_ids(ann):
+    cats = cat_id2name(ann)
+    print(' '.join([str(i) for i in sorted(cats.keys())]))
+
+
 parser = argparse.ArgumentParser(description='COCO Subset')
 parser.add_argument(
     '--categories', '-c', nargs='+', type=int,
     help='Extract annotations containing these categories')
+parser.add_argument(
+    '--category_ids', '-i', action='store_true', default=False,
+    help='Extract the list of category ids')
 parser.add_argument('--classes', '-l', help='File containing class names')
 parser.add_argument(
     '--stats', '-s', action='store_true', default=False,
@@ -115,6 +123,10 @@ if args.categories:
 
 if args.stats:
     print_stats(ann)
+    sys.exit()
+
+if args.category_ids:
+    print_category_ids(ann)
     sys.exit()
 
 save_file(args.output_path, ann)

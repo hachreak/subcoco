@@ -47,6 +47,11 @@ python subcoco.py $COCODATASET/annotations/instances_train2017.json \
         -c 4 20 21 27 -o $COCODATASET/annotations/instances_subtrain2017.json
 ```
 
+Example: print category ids.
+
+```
+python subcoco.py $COCODATASET/annotations/instances_train2017.json -i
+
 Help:
 
 ```
