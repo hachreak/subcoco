@@ -83,8 +83,8 @@ def print_stats(ann):
     files = get_image_ids(ann)
     cats = cat_id2name(ann)
     print('Files: {0}'.format(len(files)))
-    for k, v in counter.items():
-        text = "Category {0}[{1}]: {2}".format(cats[k], k, v)
+    for k in sorted(counter.keys()):
+        text = "Category {0}[{1}]: {2}".format(cats[k], k, counter[k])
         if classes.get(k):
             text = '{} -> {}'.format(text, classes.get(k))
         print(text)
