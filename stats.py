@@ -75,7 +75,8 @@ def instance_size(content, delta=0.1):
         for ann in anns:
             perc_size = (ann['bbox'][2] * ann['bbox'][3]) / \
                 (img['width'] * img['height'])
-            idx = "{:.3f}".format((perc_size // delta) * delta)
+            idx = min(1., (perc_size // delta) * delta + delta)
+            idx = "{:.3f}".format(idx)
             count[idx] += 1
     return count
 
