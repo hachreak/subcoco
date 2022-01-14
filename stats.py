@@ -7,14 +7,15 @@ from collections import defaultdict
 
 
 def to_pandas(fun):
-    def f(train, val, **kwargs):
+    def f(train, val, perc=True, **kwargs):
         to_train = fun(train, **kwargs)
         to_val = fun(val, **kwargs)
         merged = merge_dict(to_train, to_val)
         data = pd.DataFrame.from_dict(
             merged, orient='index', columns=['train', 'val'])
-        for k in data.keys():
-            data['{}_perc'.format(k)] = data[k] / data[k].sum()
+        if perc:
+            for k in data.keys():
+                data[k] = data[k] / data[k].sum()
         return data.sort_index()
     return f
 
@@ -88,6 +89,8 @@ parser.add_argument('action', help='Action to perform', choices=[
     'instance_size'])
 parser.add_argument('-d', dest='delta', default=0.05, type=float,
                     help='delta percentage')
+parser.add_argument('-p', dest='perc', default=False, action='store_true',
+                    help='show percentages instead of absolute values')
 
 args = parser.parse_args(sys.argv[1:])
 
@@ -98,10 +101,10 @@ with open(args.val_json, 'r') as f:
     val = json.load(f)
 
 if args.action == 'instances_per_category':
-    print(instances_per_cat(train, val).to_csv())
+    print(instances_per_cat(train, val, args.perc).to_csv())
 elif args.action == 'cats_per_img':
-    print(count_cats_per_img(train, val).to_csv())
+    print(count_cats_per_img(train, val, args.perc).to_csv())
 elif args.action == 'instances_per_img':
-    print(count_instances_per_img(train, val).to_csv())
+    print(count_instances_per_img(train, val, args.perc).to_csv())
 elif args.action == 'instance_size':
-    print(instance_size(train, val, delta=args.delta).to_csv())
+    print(instance_size(train, val, args.perc, delta=args.delta).to_csv())
